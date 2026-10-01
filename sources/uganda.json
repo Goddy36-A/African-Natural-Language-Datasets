@@ -1,0 +1,31 @@
+{
+  "repository": "BibleNLP/ebible",
+  "reference_path": "metadata/vref.txt",
+  "english": {
+    "language": "eng",
+    "path": "corpus/eng-eng_web.txt",
+    "source_url": "https://ebible.org/eng-web/",
+    "license": "Public Domain",
+    "notice_path": "metadata/licenses/eng-eng-web-copr.htm",
+    "notice_git_blob_sha1": "e0624164046d75f6b7f0a71588d176a0b458ec06"
+  },
+  "target": {
+    "language": "lug",
+    "name": "Luganda",
+    "region": "Central",
+    "path": "corpus/lug-lug.txt",
+    "source_url": "https://ebible.org/lug/",
+    "license": "CC-BY-SA-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "copyright": "Copyright © 2017 Biblica, Inc.",
+    "attribution": "The original work by Biblica, Inc. is available for free at www.biblica.com and open.bible.",
+    "notice_path": "metadata/licenses/lug-lug-copr.htm",
+    "notice_git_blob_sha1": "0a3ac2017c1ff14ebce4dda7b8612e7e5863342a"
+  },
+  "regional_plan": [
+    {"region": "Central", "language": "lug", "name": "Luganda", "status": "source_verified_build_pending"},
+    {"region": "Eastern", "language": "teo", "name": "Ateso", "status": "pending_verified_source_and_license"},
+    {"region": "Northern", "language": "ach", "name": "Acholi", "status": "pending_verified_source_and_license"},
+    {"region": "Western", "language": "nyn", "name": "Runyankole", "status": "existing_owner_corpus_preserved", "path": "bible_parallel_corpus_full_v2.json"}
+  ]
+}
