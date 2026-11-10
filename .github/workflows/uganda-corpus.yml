@@ -1,0 +1,65 @@
+name: Uganda Bible corpus
+
+on:
+  push:
+    branches: [forge/uganda-bible-corpora]
+    paths:
+      - 'scripts/**'
+      - 'tests/**'
+      - 'sources/**'
+      - '.github/workflows/uganda-corpus.yml'
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'tests/**'
+      - 'sources/**'
+      - '.github/workflows/uganda-corpus.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uganda-corpus-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest discover -s tests -v
+
+  build:
+    needs: test
+    # Never write to main, a PR merge ref, or a fork. Only this dedicated branch.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/forge/uganda-bible-corpora' && github.repository == 'Goddy36-A/African-Natural-Language-Datasets'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch reviewed sources and build corpus
+        run: python scripts/build_uganda_corpus.py
+      - name: Upload corpus and provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: uganda-eng-lug-corpus
+          path: data/uganda/eng-lug/
+          if-no-files-found: error
+      - name: Commit generated corpus to the feature branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- data/uganda/eng-lug/
+          if ! git diff --cached --quiet; then
+            git commit -m 'data(corpus): generate cleaned Luganda-English verse pairs'
+            git push origin HEAD:refs/heads/forge/uganda-bible-corpora
+          fi
